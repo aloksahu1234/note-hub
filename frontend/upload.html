@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Book</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            width: 350px;
+            margin: 80px auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            background: #f1f1f1;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            background: #e0f7fa;
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4facfe;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #007bff;
+            transform: translateY(-2px);
+        }
+
+        a {
+            display: block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #4facfe;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #007bff;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* File input styling */
+        input[type="file"] {
+            background: white;
+            border: 2px dashed #4facfe;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>📚 Upload Book</h2>
+
+        <form id="uploadForm">
+            <input type="text" id="title" placeholder="Book Title" required>
+            <input type="text" id="author" placeholder="Author Name" required>
+            <input type="file" id="file" accept=".pdf" required>
+            <button type="submit">Upload Book</button>
+        </form>
+
+        <a href="dashboard.html">⬅ Go to Dashboard</a>
+    </div>
+
+    <script>
+        document.getElementById("uploadForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let title = document.getElementById("title").value;
+            let author = document.getElementById("author").value;
+            let fileInput = document.getElementById("file");
+
+            let file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please select a file");
+                return;
+            }
+
+            let reader = new FileReader();
+
+            reader.onload = function () {
+                let books = JSON.parse(localStorage.getItem("books")) || [];
+
+                books.push({
+                    title: title,
+                    author: author,
+                    file: reader.result
+                });
+
+                localStorage.setItem("books", JSON.stringify(books));
+
+                alert("Book uploaded successfully!");
+                window.location.href = "books.html";
+            };
+
+            reader.readAsDataURL(file);
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f6d365, #fda085);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px;
+            color: white;
+        }
+
+        /* Grid layout */
+        #bookList {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Book card */
+        .book {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .book:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Title */
+        .book h3 {
+            margin: 10px 0;
+            color: #333;
+        }
+
+        /* Author */
+        .book p {
+            color: #777;
+        }
+
+        /* Buttons */
+        .book a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #4facfe;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .book a:hover {
+            background: #007bff;
+        }
+
+        /* Delete button */
+        .book button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #ff4d4d;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .book button:hover {
+            background: #cc0000;
+        }
+
+        /* Empty message */
+        .empty {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            margin-top: 50px;
+        }
+
+        /* Back link */
+        .back {
+            display: block;
+            text-align: center;
+            margin: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+        <h2>📚 Available Books</h2>
+    </div>
+
+    <div id="bookList"></div>
+
+    <a href="dashboard.html" class="back">⬅ Back to Dashboard</a>
+
+    <script>
+        let books = JSON.parse(localStorage.getItem("books")) || [];
+        let container = document.getElementById("bookList");
+
+        if (books.length === 0) {
+            container.innerHTML = "<p class='empty'>No books uploaded yet 📭</p>";
+        }
+
+        books.forEach((book, index) => {
+            let div = document.createElement("div");
+            div.className = "book";
+
+            div.innerHTML = `
+        <h3>${book.title}</h3>
+        <p>✍ Author: ${book.author}</p>
+        <a href="${book.file}" target="_blank">📖 Read</a>
+        <br>
+        <button onclick="deleteBook(${index})">🗑 Delete</button>
+    `;
+
+            container.appendChild(div);
+        });
+
+        function deleteBook(index) {
+            let books = JSON.parse(localStorage.getItem("books"));
+            books.splice(index, 1);
+            localStorage.setItem("books", JSON.stringify(books));
+            location.reload();
+        }
+    </script>
+
+</body>
+
+</html>

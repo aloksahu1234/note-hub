@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+}
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+}
+.error { color: red; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Register</h2>
+
+    <form id="registerForm">
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button type="submit">Register</button>
+        <p class="error" id="error"></p>
+    </form>
+
+    <p>Already have an account? <a href="login.html">Login</a></p>
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let name = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value.trim();
+    let error = document.getElementById("error");
+
+    if (name === "" || email === "" || password === "") {
+        error.textContent = "All fields are required!";
+        return;
+    }
+
+    if (password.length < 6) {
+        error.textContent = "Password must be at least 6 characters!";
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    let userExists = users.find(user => user.email === email);
+    if (userExists) {
+        error.textContent = "User already exists!";
+        return;
+    }
+
+    users.push({ name, email, password });
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Registration successful!");
+    window.location.href = "login.html";
+});
+</script>
+</body>
+</html>
